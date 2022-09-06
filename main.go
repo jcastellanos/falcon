@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/jcastellanos/falcon/core/usecases"
+	"github.com/jcastellanos/falcon/infraestructure/adapters"
 )
 
 func main() {
 	fmt.Println("Running falcon")
-	loadSystemMonitor := usecases.NewLoadSystemMonitorCase()
+	httpMonitor := adapters.NewHttpMonitorAdapter()
+	loadSystemMonitor := usecases.NewLoadSystemMonitorCase(httpMonitor)
 	loadSystemMonitor.Load()
 	loadSystemMonitor.StartMonitoring()
 }
