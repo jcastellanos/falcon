@@ -9,7 +9,7 @@ import (
 func main() {
 	fmt.Println("Running falcon")
 	httpMonitor := adapters.NewHttpMonitorAdapter()
-	loadSystemMonitor := usecases.NewLoadSystemMonitorCase(httpMonitor)
+	loadSystemMonitor := usecases.NewMonitorCase(httpMonitor)
 	loadSystemMonitor.AddNotifier(adapters.NewTeamsNotifierAdapter())
 	loadSystemMonitor.Load()
 	loadSystemMonitor.StartMonitoring()

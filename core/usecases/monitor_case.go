@@ -7,20 +7,20 @@ import (
 	"time"
 )
 
-type LoadSystemMonitorCase struct {
+type MonitorCase struct {
 	systemMonitor models.SystemMonitor
 	httpMonitor ports.HttpMonitor
 	notifiers []ports.Notifier
 }
 
-func NewLoadSystemMonitorCase(httpMonitor ports.HttpMonitor) LoadSystemMonitorCase {
-	return LoadSystemMonitorCase {
+func NewMonitorCase(httpMonitor ports.HttpMonitor) MonitorCase {
+	return MonitorCase {
 		systemMonitor: models.NewSystemMonitor(),
 		httpMonitor: httpMonitor,
 	}
 }
 
-func (a *LoadSystemMonitorCase) Load() {
+func (a *MonitorCase) Load() {
 	monitor1 := models.Monitor{
 		Url:          "https://localhost/",
 		Response:     200,
@@ -35,17 +35,17 @@ func (a *LoadSystemMonitorCase) Load() {
 	a.systemMonitor.Append(monitor1)
 }
 
-func (a *LoadSystemMonitorCase) AddNotifier(notifier ports.Notifier) {
+func (a *MonitorCase) AddNotifier(notifier ports.Notifier) {
 	a.notifiers = append(a.notifiers, notifier)
 }
 
-func (a *LoadSystemMonitorCase) StartMonitoring() {
+func (a *MonitorCase) StartMonitoring() {
 	for _, monitor := range a.systemMonitor.GetMonitors() {
 		a.monitoring(monitor, 0)
 	}
 }
 
-func (a *LoadSystemMonitorCase) monitoring(monitor models.Monitor, retry int) {
+func (a *MonitorCase) monitoring(monitor models.Monitor, retry int) {
 	if retry < 3 {
 		res, err := a.httpMonitor.Ping(monitor)
 		if !res {
