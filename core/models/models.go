@@ -21,6 +21,15 @@ type Monitor struct {
 	Response 		int
 	Timeout			int
 	Retry			int
-	GuardPhones		string
 	GuardChannel	string
+	PrimaryGuard	Guard
+	SecundaryGuard	Guard
+	ShadowGuard		Guard
+	LeaderGuard		Guard
+}
+
+type Guard struct {
+	Username	string
+	Phone		string
+	Email		string
 }

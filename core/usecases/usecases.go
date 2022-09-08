@@ -10,7 +10,7 @@ import (
 type LoadSystemMonitorCase struct {
 	systemMonitor models.SystemMonitor
 	httpMonitor ports.HttpMonitor
-	notifiers []ports.Notifiers
+	notifiers []ports.Notifier
 }
 
 func NewLoadSystemMonitorCase(httpMonitor ports.HttpMonitor) LoadSystemMonitorCase {
@@ -25,10 +25,18 @@ func (a *LoadSystemMonitorCase) Load() {
 		Url:          "https://localhost/",
 		Response:     200,
 		Timeout:      3000,
-		GuardPhones:  "3175338977",
 		GuardChannel: "https://grupoasd.webhook.office.com/webhookb2/e5833100-ddee-4ee3-bce5-ec4531bc1242@48de1fb0-71ca-41a5-b236-d3182d042c09/IncomingWebhook/80bb6a8e58d5480f9ed9dd656faa8f77/38628351-d1b8-4bc4-8f53-f83e3aafb46a",
+		PrimaryGuard: models.Guard {
+			Username: "jcastellanos",
+			Phone: "3175338977",
+			Email: "juancastellanosm@gmail.com",
+		},
 	}
 	a.systemMonitor.Append(monitor1)
+}
+
+func (a *LoadSystemMonitorCase) AddNotifier(notifier ports.Notifier) {
+	a.notifiers = append(a.notifiers, notifier)
 }
 
 func (a *LoadSystemMonitorCase) StartMonitoring() {
@@ -49,7 +57,9 @@ func (a *LoadSystemMonitorCase) monitoring(monitor models.Monitor, retry int) {
 		}
 	} else {
 		fmt.Println("Error despues de los retry")
-
+		for _, notifier := range a.notifiers {
+			notifier.Notify(monitor)
+		}
 	}
 
 }
