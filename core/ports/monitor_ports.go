@@ -6,6 +6,6 @@ type HttpMonitor interface {
 	Ping(monitor models.Monitor) (bool, error)
 }
 
-type Notifier interface {
-	Notify(monitor models.Monitor) (bool, error)
+type Alerter interface {
+	ThrowAlert(monitorAlert models.MonitorAlert) (bool, error)
 }

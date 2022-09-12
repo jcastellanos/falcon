@@ -20,7 +20,7 @@ func NewHttpMonitorAdapter() HttpMonitorAdapter {
 
 func (a HttpMonitorAdapter) Ping(monitor models.Monitor) (bool, error) {
 	fmt.Println("Ping")
-	ctx, cancel := context.WithTimeout(context.Background(), 3000 * time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(monitor.TimeoutMillis) * time.Millisecond)
 	defer cancel()
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, monitor.Url, nil)
 	if err != nil {

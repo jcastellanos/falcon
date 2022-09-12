@@ -10,38 +10,34 @@ import (
 type MonitorCase struct {
 	systemMonitor models.SystemMonitor
 	httpMonitor ports.HttpMonitor
-	notifiers []ports.Notifier
+	alerter ports.Alerter
 }
 
-func NewMonitorCase(httpMonitor ports.HttpMonitor) MonitorCase {
+func NewMonitorCase(httpMonitor ports.HttpMonitor, alerter ports.Alerter) MonitorCase {
 	return MonitorCase {
 		systemMonitor: models.NewSystemMonitor(),
 		httpMonitor: httpMonitor,
+		alerter: alerter,
 	}
 }
 
 func (a *MonitorCase) Load() {
 	monitor1 := models.Monitor{
-		Url:          "https://localhost/",
-		Response:     200,
-		Timeout:      3000,
-		GuardChannel: "https://grupoasd.webhook.office.com/webhookb2/e5833100-ddee-4ee3-bce5-ec4531bc1242@48de1fb0-71ca-41a5-b236-d3182d042c09/IncomingWebhook/80bb6a8e58d5480f9ed9dd656faa8f77/38628351-d1b8-4bc4-8f53-f83e3aafb46a",
-		PrimaryGuard: models.Guard {
-			Username: "jcastellanos",
-			Phone: "3175338977",
-			Email: "juancastellanosm@gmail.com",
-		},
+		Id:			  		"1",
+		ApplicationId:		"1",
+		ApplicationName:  	"Jenkins Calle 46",
+		Url:          		"https://localhost/",
+		Response:     		200,
+		TimeoutMillis:      3000,
 	}
 	a.systemMonitor.Append(monitor1)
 }
 
-func (a *MonitorCase) AddNotifier(notifier ports.Notifier) {
-	a.notifiers = append(a.notifiers, notifier)
-}
-
 func (a *MonitorCase) StartMonitoring() {
-	for _, monitor := range a.systemMonitor.GetMonitors() {
-		a.monitoring(monitor, 0)
+	for _ = range time.Tick(time.Minute * 5) {
+		for _, monitor := range a.systemMonitor.GetMonitors() {
+			go a.monitoring(monitor, 0)
+		}
 	}
 }
 
@@ -57,9 +53,15 @@ func (a *MonitorCase) monitoring(monitor models.Monitor, retry int) {
 		}
 	} else {
 		fmt.Println("Error despues de los retry")
-		for _, notifier := range a.notifiers {
-			notifier.Notify(monitor)
-		}
+		a.alerter.ThrowAlert(models.MonitorAlert{
+			Id:       			monitor.Id,
+			ApplicationId: 		monitor.ApplicationId,
+			ApplicationName: 	monitor.ApplicationName,
+			Url:      			monitor.Url,
+			Subject:  			"Error al consultar la aplicación " + monitor.ApplicationName,
+			Message:  			"Se ha presentado un error en el monitor de la aplicación",
+			Priority: 			"CRITICAL",
+		})
 	}
 
 }

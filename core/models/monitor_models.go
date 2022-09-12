@@ -17,19 +17,21 @@ func (s *SystemMonitor) GetMonitors() []Monitor {
 }
 
 type Monitor struct {
+	Id				string
+	ApplicationId	string
+	ApplicationName	string
 	Url 			string
 	Response 		int
-	Timeout			int
+	TimeoutMillis	int
 	Retry			int
-	GuardChannel	string
-	PrimaryGuard	Guard
-	SecundaryGuard	Guard
-	ShadowGuard		Guard
-	LeaderGuard		Guard
 }
 
-type Guard struct {
-	Username	string
-	Phone		string
-	Email		string
+type MonitorAlert struct {
+	Id				string
+	ApplicationId	string
+	ApplicationName string
+	Url 			string
+	Subject 		string
+	Message			string
+	Priority		string
 }

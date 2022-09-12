@@ -15,16 +15,17 @@ func NewTeamsNotifierAdapter() TeamsNotifierAdapter {
 	return TeamsNotifierAdapter {}
 }
 
-func (a TeamsNotifierAdapter) Notify(monitor models.Monitor) (bool, error) {
+func (a TeamsNotifierAdapter) Notify(alert models.Alert, guard models.Guard) (bool, error) {
 	// Initialize a new Microsoft Teams client.
 	mstClient := goteamsnotify.NewClient()
 
 	// The title for message (first TextBlock element).
-	msgTitle := "Alarma - Se ha presentado un error consultando el servicio"
+	msgTitle := "Alarma - " + alert.Subject
 
 	// Formatted message body.
-	msgText := "Here are some examples of formatted stuff like " +
-		"\n * this list itself  \n * **bold** \n * *italic* \n * ***bolditalic***"
+	//msgText := "Here are some examples of formatted stuff like " +
+	//	"\n * this list itself  \n * **bold** \n * *italic* \n * ***bolditalic***"
+	msgText := alert.Message
 
 	// Create message using provided formatted title and text.
 	msg := goteamsnotify.NewMessageCard()
@@ -32,7 +33,7 @@ func (a TeamsNotifierAdapter) Notify(monitor models.Monitor) (bool, error) {
 	msg.Title = msgTitle
 
 	// Send the message with default timeout/retry settings.
-	if err := mstClient.Send(monitor.GuardChannel, msg); err != nil {
+	if err := mstClient.Send(guard.ChannelWebhook, msg); err != nil {
 		log.Printf(
 			"failed to send message: %v",
 			err,
