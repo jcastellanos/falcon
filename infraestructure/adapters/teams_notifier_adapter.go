@@ -25,7 +25,7 @@ func (a TeamsNotifierAdapter) Notify(alert models.Alert, guard models.Guard) (bo
 	// Formatted message body.
 	//msgText := "Here are some examples of formatted stuff like " +
 	//	"\n * this list itself  \n * **bold** \n * *italic* \n * ***bolditalic***"
-	msgText := alert.Message
+	msgText := alert.Message + "\n \n **Prioridad:** " + alert.Priority + "\n ***URL:*** " + alert.Url
 
 	// Create message using provided formatted title and text.
 	msg := goteamsnotify.NewMessageCard()

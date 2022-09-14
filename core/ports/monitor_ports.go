@@ -9,3 +9,7 @@ type HttpMonitor interface {
 type Alerter interface {
 	ThrowAlert(monitorAlert models.MonitorAlert) (bool, error)
 }
+
+type MonitorReader interface {
+	Read() ([]models.Monitor, error)
+}

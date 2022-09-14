@@ -11,8 +11,9 @@ func main() {
 	alertCase := usecases.NewAlertCase()
 	alertCase.Load()
 	alertCase.AddNotifier(adapters.NewTeamsNotifierAdapter())
+	monitorReader := adapters.NewCSVMonitorReader("monitors.csv")
 	monitorCase := usecases.NewMonitorCase(adapters.NewHttpMonitorAdapter(),
-		adapters.NewLocalAlerterAdapter(alertCase))
+		adapters.NewLocalAlerterAdapter(alertCase), monitorReader)
 	monitorCase.Load()
 	monitorCase.StartMonitoring()
 }
