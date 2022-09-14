@@ -24,10 +24,10 @@ func (a AmazonConnectNotifierAdapter) Notify(alert models.Alert, guard models.Gu
 	}
 	conn := connect.New(sess)
 	contactInput := connect.StartOutboundVoiceContactInput{
-		ContactFlowId:                aws.String("22cacb61-b4c9-4f1c-9bfa-5e924a026bb6"),
-		DestinationPhoneNumber:       aws.String("+576015357113"),
-		InstanceId:                   aws.String("ebfc66bd-0344-4878-955e-ed8580637fcb"),
-		SourcePhoneNumber:            aws.String("+576015143170"),
+		ContactFlowId:                aws.String(""),
+		DestinationPhoneNumber:       aws.String(""),
+		InstanceId:                   aws.String(""),
+		SourcePhoneNumber:            aws.String(""),
 	}
 	contactOuput, err := conn.StartOutboundVoiceContact(&contactInput)
 	if err != nil {
