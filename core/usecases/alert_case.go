@@ -16,16 +16,22 @@ func NewAlertCase() AlertCase {
 
 func (a *AlertCase) Load() {
 	person := models.Person {
-		Username: "jcastellanos",
-		Phone:    "3175338977",
-		Email:    "juancastellanosm@gmail.com",
+		Username: "xxx",
+		Phone:    "xxx",
+		Email:    "xxxx",
 	}
-	guard := models.Guard {
+	guard1 := models.Guard {
 		ApplicationId: 	"1",
 		Primary:       	person,
-		ChannelWebhook: "https://grupoasd.webhook.office.com/webhookb2/e5833100-ddee-4ee3-bce5-ec4531bc1242@48de1fb0-71ca-41a5-b236-d3182d042c09/IncomingWebhook/80bb6a8e58d5480f9ed9dd656faa8f77/38628351-d1b8-4bc4-8f53-f83e3aafb46a",
+		ChannelWebhook: "XXXX",
 	}
-	a.schedule.AppendGuard(guard)
+	guard2 := models.Guard {
+		ApplicationId: 	"2{",
+		Primary:       	person,
+		ChannelWebhook: "XXXX",
+	}
+	a.schedule.AppendGuard(guard1)
+	a.schedule.AppendGuard(guard2)
 }
 
 func (a *AlertCase) AddNotifier(notifier ports.Notifier) {

@@ -11,6 +11,7 @@ func main() {
 	alertCase := usecases.NewAlertCase()
 	alertCase.Load()
 	alertCase.AddNotifier(adapters.NewTeamsNotifierAdapter())
+	alertCase.AddNotifier(adapters.NewAmazonConnectNotifierAdapter())
 	monitorReader := adapters.NewCSVMonitorReader("monitors.csv")
 	monitorCase := usecases.NewMonitorCase(adapters.NewHttpMonitorAdapter(),
 		adapters.NewLocalAlerterAdapter(alertCase), monitorReader)
