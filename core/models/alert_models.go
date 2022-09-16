@@ -24,15 +24,17 @@ func (a *GuardSchedule) GetGuards() []Guard {
 
 type Guard struct {
 	ApplicationId	string
-	Primary			Person
-	Secundary		Person
-	Shadow			Person
+	Primary   		Person
+	Secondary 		Person
+	Shadow    		Person
 	Leader			Person
 	ChannelWebhook 	string
 }
 
 type Person struct {
+	Id			string
 	Username	string
+	Name		string
 	Phone		string
 	Email		string
 }

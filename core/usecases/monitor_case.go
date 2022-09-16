@@ -8,6 +8,9 @@ import (
 	"time"
 )
 
+const (
+	RetryNums = 3
+)
 type MonitorCase struct {
 	systemMonitor models.SystemMonitor
 	httpMonitor ports.HttpMonitor
@@ -45,17 +48,18 @@ func (a *MonitorCase) StartMonitoring() {
 }
 
 func (a *MonitorCase) monitoring(monitor models.Monitor, retry int) {
-	if retry < 3 {
+	if retry < RetryNums {
+		log.Printf("Ping %s Try: #%d", monitor.Url, retry+1)
 		res, err := a.httpMonitor.Ping(monitor)
 		if !res {
 			fmt.Println(err)
-			time.Sleep(10 * time.Second)
+			time.Sleep(10000 * time.Millisecond)
 			a.monitoring(monitor, retry + 1)
 		} else {
-			fmt.Println("Ping OK")
+			log.Printf("Service is up again")
 		}
 	} else {
-		fmt.Println("Error despues de los retry")
+		log.Printf("Throwing an alert")
 		a.alerter.ThrowAlert(models.MonitorAlert{
 			ApplicationId: 		monitor.ApplicationId,
 			ApplicationName: 	monitor.ApplicationName,

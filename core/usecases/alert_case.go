@@ -3,35 +3,27 @@ package usecases
 import (
 	"github.com/jcastellanos/falcon/core/models"
 	"github.com/jcastellanos/falcon/core/ports"
+	"log"
 )
 
 type AlertCase struct {
-	schedule models.GuardSchedule
-	notifiers []ports.Notifier
+	schedule 	models.GuardSchedule
+	notifiers 	[]ports.Notifier
+	alertReader ports.AlertReader
 }
 
-func NewAlertCase() AlertCase {
-	return AlertCase { }
+func NewAlertCase(alertReader ports.AlertReader) AlertCase {
+	return AlertCase {
+		alertReader: alertReader,
+	}
 }
 
 func (a *AlertCase) Load() {
-	person := models.Person {
-		Username: "xxx",
-		Phone:    "xxx",
-		Email:    "xxxx",
+	schedule, err := a.alertReader.Read()
+	if err != nil {
+		log.Fatal(err)
 	}
-	guard1 := models.Guard {
-		ApplicationId: 	"1",
-		Primary:       	person,
-		ChannelWebhook: "XXXX",
-	}
-	guard2 := models.Guard {
-		ApplicationId: 	"2{",
-		Primary:       	person,
-		ChannelWebhook: "XXXX",
-	}
-	a.schedule.AppendGuard(guard1)
-	a.schedule.AppendGuard(guard2)
+	a.schedule = schedule
 }
 
 func (a *AlertCase) AddNotifier(notifier ports.Notifier) {
